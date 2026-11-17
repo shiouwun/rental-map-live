@@ -647,29 +647,30 @@
                     </div>
                 </div>
 
-                <!-- 4. 交通通勤模式 -->
+                <!-- 4. 交通通勤模式 (支援複選) -->
                 <div class="filter-section">
                     <div class="section-header">
                         <span class="section-title">🚍 交通通勤模式</span>
+                        <span class="section-subtext">支援複選</span>
                     </div>
                     <div class="chip-group" id="chips-transit">
-                        <span class="chip-btn active" onclick="setTransitFilter('all', this)">全部</span>
-                        <span class="chip-btn" onclick="setTransitFilter('mrt', this)">🚇 僅捷運生活圈 (紅樹林/文山)</span>
-                        <span class="chip-btn" onclick="setTransitFilter('bus', this)">🚏 僅直達公車沿線 (新店安坑等)</span>
+                        <span class="chip-btn active" data-val="all" onclick="toggleTransitFilter('all', this)">全部</span>
+                        <span class="chip-btn" data-val="mrt" onclick="toggleTransitFilter('mrt', this)">🚇 捷運生活圈 (紅樹林/文山)</span>
+                        <span class="chip-btn" data-val="bus" onclick="toggleTransitFilter('bus', this)">🚏 直達公車沿線 (新店安坑等)</span>
                     </div>
                 </div>
 
-                <!-- 5. 建物型態 -->
+                <!-- 5. 建物型態 (支援複選) -->
                 <div class="filter-section">
                     <div class="section-header">
                         <span class="section-title">🏢 建物型態</span>
-                        <span class="section-subtext">6樓以上依法必有電梯</span>
+                        <span class="section-subtext">支援複選 (6樓以上依法必有電梯)</span>
                     </div>
                     <div class="chip-group" id="chips-building">
-                        <span class="chip-btn active" onclick="setBuildingFilter('all', this)">全部型態</span>
-                        <span class="chip-btn" onclick="setBuildingFilter('電梯大樓', this)">電梯大樓 (8樓+)</span>
-                        <span class="chip-btn" onclick="setBuildingFilter('華廈', this)">華廈 (電梯7樓以下)</span>
-                        <span class="chip-btn" onclick="setBuildingFilter('公寓', this)">公寓 (無電梯)</span>
+                        <span class="chip-btn active" data-val="all" onclick="toggleBuildingFilter('all', this)">全部型態</span>
+                        <span class="chip-btn" data-val="電梯大樓" onclick="toggleBuildingFilter('電梯大樓', this)">電梯大樓 (8樓+)</span>
+                        <span class="chip-btn" data-val="華廈" onclick="toggleBuildingFilter('華廈', this)">華廈 (電梯7樓以下)</span>
+                        <span class="chip-btn" data-val="公寓" onclick="toggleBuildingFilter('公寓', this)">公寓 (無電梯)</span>
                     </div>
                 </div>
 
@@ -790,14 +791,14 @@
         const allMarkers = [];
         let activeLine = null;
 
-        // 6 大複合過濾狀態
+        // 6 大複合過濾狀態 (交通與建物型態支援複選)
         let currentFilters = {
-            transit: 'all',       // 'all' | 'bus' | 'mrt'
+            transits: ['all'],    // 複選: ['all'] 或 ['mrt', 'bus']
             minArea: 0,           // 最小坪數 (float)
             maxPrice: 999999,     // 最高租金 (int)
             maxMfee: 99999,       // 最高管理費 (int)
             onlySubsidy: false,   // 僅限可租補 (bool)
-            building: 'all',      // 'all' | '電梯大樓' | '華廈' | '公寓'
+            buildings: ['all'],   // 複選: ['all'] 或 ['電梯大樓', '華廈', '公寓']
             maxFloor: 99          // 幾樓以下 (int)
         };
 
@@ -923,8 +924,10 @@
 
         // 判定單筆資料是否通過當前過濾器
         function checkPassFilter(d) {
-            // 1. 交通模式
-            if (currentFilters.transit !== 'all' && d.transit_type !== currentFilters.transit) return false;
+            // 1. 交通模式 (支援複選)
+            if (!currentFilters.transits.includes('all') && !currentFilters.transits.includes(d.transit_type)) {
+                return false;
+            }
 
             // 2. 最小坪數 (沒人嫌大)
             if (d.area < currentFilters.minArea) return false;
@@ -938,8 +941,10 @@
             // 5. 租金補貼
             if (currentFilters.onlySubsidy && d.has_subsidy !== 1) return false;
 
-            // 6. 建物型態
-            if (currentFilters.building !== 'all' && d.building_type !== currentFilters.building) return false;
+            // 6. 建物型態 (支援複選)
+            if (!currentFilters.buildings.includes('all') && !currentFilters.buildings.includes(d.building_type)) {
+                return false;
+            }
 
             // 7. 幾樓以下 (電梯大樓自動豁免爬高)
             if (d.has_elevator !== 1 && d.floor_num > currentFilters.maxFloor) return false;
@@ -977,12 +982,12 @@
         // 標記是否有啟用自訂過濾
         function updateFilterActiveIndicators() {
             const isFiltered = (
-                currentFilters.transit !== 'all' ||
+                !currentFilters.transits.includes('all') ||
                 currentFilters.minArea > 0 ||
                 currentFilters.maxPrice < 999999 ||
                 currentFilters.maxMfee < 99999 ||
                 currentFilters.onlySubsidy ||
-                currentFilters.building !== 'all' ||
+                !currentFilters.buildings.includes('all') ||
                 currentFilters.maxFloor < 99
             );
             const dot = document.getElementById('header-filter-dot');
@@ -1011,12 +1016,12 @@
         // 重設全部過濾條件
         function resetAllFilters() {
             currentFilters = {
-                transit: 'all',
+                transits: ['all'],
                 minArea: 0,
                 maxPrice: 999999,
                 maxMfee: 99999,
                 onlySubsidy: false,
-                building: 'all',
+                buildings: ['all'],
                 maxFloor: 99
             };
 
@@ -1031,8 +1036,8 @@
             resetGroupActive('chips-price', 999999);
             resetGroupActive('chips-mfee', 99999);
             resetGroupActive('chips-floor', 99);
-            resetGroupTextActive('chips-transit', '全部');
-            resetGroupTextActive('chips-building', '全部型態');
+            resetGroupActive('chips-transit', 'all');
+            resetGroupActive('chips-building', 'all');
             resetGroupTextActive('chips-subsidy', '全部房源');
 
             updateModalPreviewCount();
@@ -1100,17 +1105,67 @@
             updateModalPreviewCount();
         }
 
-        // 4. 交通模式
-        function setTransitFilter(val, el) {
-            currentFilters.transit = val;
-            updateChipsInGroup('chips-transit', el);
+        // 4. 交通模式 (支援複選)
+        function toggleTransitFilter(val, el) {
+            const container = document.getElementById('chips-transit');
+            if (val === 'all') {
+                currentFilters.transits = ['all'];
+                container.querySelectorAll('.chip-btn').forEach(b => {
+                    b.classList.toggle('active', b.getAttribute('data-val') === 'all');
+                });
+            } else {
+                currentFilters.transits = currentFilters.transits.filter(t => t !== 'all');
+                const chipAll = container.querySelector('[data-val="all"]');
+                if (chipAll) chipAll.classList.remove('active');
+
+                if (currentFilters.transits.includes(val)) {
+                    currentFilters.transits = currentFilters.transits.filter(t => t !== val);
+                    el.classList.remove('active');
+                } else {
+                    currentFilters.transits.push(val);
+                    el.classList.add('active');
+                }
+
+                const specificOptions = ['mrt', 'bus'];
+                if (currentFilters.transits.length === 0 || currentFilters.transits.length === specificOptions.length) {
+                    currentFilters.transits = ['all'];
+                    container.querySelectorAll('.chip-btn').forEach(b => {
+                        b.classList.toggle('active', b.getAttribute('data-val') === 'all');
+                    });
+                }
+            }
             updateModalPreviewCount();
         }
 
-        // 5. 建物型態
-        function setBuildingFilter(val, el) {
-            currentFilters.building = val;
-            updateChipsInGroup('chips-building', el);
+        // 5. 建物型態 (支援複選)
+        function toggleBuildingFilter(val, el) {
+            const container = document.getElementById('chips-building');
+            if (val === 'all') {
+                currentFilters.buildings = ['all'];
+                container.querySelectorAll('.chip-btn').forEach(b => {
+                    b.classList.toggle('active', b.getAttribute('data-val') === 'all');
+                });
+            } else {
+                currentFilters.buildings = currentFilters.buildings.filter(b => b !== 'all');
+                const chipAll = container.querySelector('[data-val="all"]');
+                if (chipAll) chipAll.classList.remove('active');
+
+                if (currentFilters.buildings.includes(val)) {
+                    currentFilters.buildings = currentFilters.buildings.filter(b => b !== val);
+                    el.classList.remove('active');
+                } else {
+                    currentFilters.buildings.push(val);
+                    el.classList.add('active');
+                }
+
+                const specificOptions = ['電梯大樓', '華廈', '公寓'];
+                if (currentFilters.buildings.length === 0 || currentFilters.buildings.length === specificOptions.length) {
+                    currentFilters.buildings = ['all'];
+                    container.querySelectorAll('.chip-btn').forEach(b => {
+                        b.classList.toggle('active', b.getAttribute('data-val') === 'all');
+                    });
+                }
+            }
             updateModalPreviewCount();
         }
 
