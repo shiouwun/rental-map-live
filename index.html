@@ -23,6 +23,7 @@
             flex-direction: column;
             height: 100vh;
             overflow: hidden;
+            position: relative;
         }
         /* 密碼驗證遮罩層 */
         #auth-overlay {
@@ -31,52 +32,49 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(18, 18, 20, 0.98);
-            backdrop-filter: blur(15px);
+            background: rgba(9, 9, 11, 0.95);
+            backdrop-filter: blur(12px);
             z-index: 99999;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 24px;
         }
-        .auth-box {
-            background: #1a1a1e;
-            border: 1px solid #323238;
+        .auth-card {
+            background: #27272a;
+            border: 1px solid #3f3f46;
             border-radius: 16px;
-            padding: 30px 24px;
+            padding: 32px 24px;
             width: 100%;
             max-width: 380px;
             text-align: center;
             box-shadow: 0 20px 40px rgba(0,0,0,0.6);
         }
-        .auth-icon {
-            font-size: 40px;
-            margin-bottom: 12px;
-        }
         .auth-title {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 700;
-            color: #00e676;
-            margin-bottom: 6px;
+            color: #f4f4f5;
+            margin-bottom: 8px;
         }
         .auth-desc {
             font-size: 13px;
             color: #a1a1aa;
-            margin-bottom: 20px;
-            line-height: 1.4;
+            margin-bottom: 24px;
+            line-height: 1.5;
         }
         .auth-input {
             width: 100%;
-            background: #121214;
-            border: 1px solid #3f3f46;
-            border-radius: 8px;
-            padding: 12px 14px;
+            padding: 14px 16px;
+            border-radius: 10px;
+            border: 1px solid #52525b;
+            background: #18181b;
             color: #fff;
-            font-size: 15px;
+            font-size: 16px;
+            outline: none;
+            margin-bottom: 16px;
             text-align: center;
             letter-spacing: 2px;
-            outline: none;
-            margin-bottom: 14px;
             transition: border-color 0.2s;
         }
         .auth-input:focus {
@@ -84,13 +82,13 @@
         }
         .auth-btn {
             width: 100%;
-            background: #00e676;
-            color: #000;
-            font-weight: 700;
+            padding: 14px;
+            border-radius: 10px;
             border: none;
-            border-radius: 8px;
-            padding: 12px 0;
-            font-size: 14px;
+            background: #00e676;
+            color: #09090b;
+            font-size: 16px;
+            font-weight: 700;
             cursor: pointer;
             transition: opacity 0.2s;
         }
@@ -99,90 +97,70 @@
         }
         .auth-error {
             color: #ef4444;
-            font-size: 12px;
-            margin-top: 10px;
+            font-size: 13px;
+            margin-top: 12px;
             display: none;
         }
 
-        /* 頂部資訊列 */
+        /* 頂部純淨導航列 */
         header {
-            background: #1a1a1e;
+            background: #18181b;
+            border-bottom: 1px solid #27272a;
             padding: 10px 14px;
-            border-bottom: 1px solid #29292e;
             display: flex;
-            flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
-            gap: 8px;
             z-index: 1000;
+            height: 52px;
         }
         .header-title {
             font-size: 15px;
             font-weight: 700;
-            color: #00e676;
+            color: #f4f4f5;
             display: flex;
             align-items: center;
             gap: 6px;
         }
-        .stats-bar {
+        .header-actions {
             display: flex;
-            gap: 8px;
-            font-size: 12px;
-        }
-        .stat-item {
-            background: #202024;
-            padding: 3px 8px;
-            border-radius: 6px;
-            border: 1px solid #323238;
-        }
-        .stat-item b {
-            color: #00e676;
-        }
-
-        /* 6 大維度多條件過濾控制面板 */
-        .filter-panel {
-            background: #18181b;
-            padding: 8px 12px;
-            border-bottom: 1px solid #27272a;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            font-size: 12px;
-        }
-        .filter-row {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            white-space: nowrap;
             align-items: center;
-            -webkit-overflow-scrolling: touch;
+            gap: 8px;
         }
-        .filter-label {
+        .stat-badge {
+            font-size: 12px;
             color: #a1a1aa;
-            font-weight: 600;
-            font-size: 11px;
-            flex-shrink: 0;
-        }
-        .filter-chip {
             background: #27272a;
+            padding: 4px 8px;
+            border-radius: 6px;
             border: 1px solid #3f3f46;
-            color: #d4d4d8;
-            padding: 4px 10px;
-            border-radius: 14px;
-            cursor: pointer;
-            transition: all 0.15s;
-            flex-shrink: 0;
         }
-        .filter-chip.active {
-            background: #00e676;
-            color: #000;
-            font-weight: 700;
-            border-color: #00e676;
+        .stat-badge b {
+            color: #00e676;
         }
-        .filter-chip.subsidy.active {
-            background: #ec4899;
+        .btn-filter-trigger {
+            background: linear-gradient(135deg, #10b981, #059669);
             color: #fff;
-            border-color: #ec4899;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+            transition: transform 0.1s;
+        }
+        .btn-filter-trigger:active {
+            transform: scale(0.96);
+        }
+        .filter-active-dot {
+            width: 8px;
+            height: 8px;
+            background: #facc15;
+            border-radius: 50%;
+            display: none;
         }
 
         /* 地圖容器 */
@@ -193,22 +171,271 @@
             background: #e5e7eb;
         }
 
+        /* 右下角懸浮按鈕 (FAB) */
+        .fab-filter {
+            position: absolute;
+            bottom: 24px;
+            right: 18px;
+            background: #10b981;
+            color: #fff;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.5), 0 0 12px rgba(16, 185, 129, 0.4);
+            z-index: 1000;
+            cursor: pointer;
+            border: 2px solid #34d399;
+            font-size: 18px;
+            transition: transform 0.15s;
+        }
+        .fab-filter:active {
+            transform: scale(0.92);
+        }
+        .fab-label {
+            font-size: 10px;
+            font-weight: 700;
+            margin-top: -2px;
+        }
+
+        /* 彈出式篩選抽屜 (Bottom Sheet Modal) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+        .modal-overlay.open {
+            display: block;
+            opacity: 1;
+        }
+        .filter-drawer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            max-width: 560px;
+            margin: 0 auto;
+            right: 0;
+            background: #18181b;
+            border-top: 1px solid #3f3f46;
+            border-radius: 20px 20px 0 0;
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.8);
+            z-index: 2001;
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            max-height: 86vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .filter-drawer.open {
+            transform: translateY(0);
+        }
+
+        /* 抽屜頂部 */
+        .drawer-header {
+            padding: 12px 18px;
+            border-bottom: 1px solid #27272a;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            position: relative;
+        }
+        .drawer-handle {
+            position: absolute;
+            top: 6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 36px;
+            height: 4px;
+            background: #52525b;
+            border-radius: 2px;
+        }
+        .drawer-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #f4f4f5;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 4px;
+        }
+        .drawer-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 4px;
+        }
+        .btn-reset-all {
+            background: none;
+            border: none;
+            color: #a1a1aa;
+            font-size: 13px;
+            cursor: pointer;
+            padding: 4px 6px;
+        }
+        .btn-reset-all:hover {
+            color: #f4f4f5;
+        }
+        .btn-close-drawer {
+            background: #27272a;
+            border: 1px solid #3f3f46;
+            color: #d4d4d8;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        /* 抽屜內容 (可滾動區) */
+        .drawer-content {
+            padding: 14px 18px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .filter-section {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+        .section-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #f4f4f5;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .section-subtext {
+            font-size: 11px;
+            color: #71717a;
+        }
+        .chip-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .chip-btn {
+            background: #27272a;
+            border: 1px solid #3f3f46;
+            color: #d4d4d8;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.15s;
+            user-select: none;
+        }
+        .chip-btn.active {
+            background: #10b981;
+            color: #000;
+            font-weight: 700;
+            border-color: #10b981;
+        }
+        .chip-btn.subsidy.active {
+            background: #ec4899;
+            color: #fff;
+            border-color: #ec4899;
+        }
+
+        /* 自填自訂數字輸入框容器 */
+        .custom-input-box {
+            display: flex;
+            align-items: center;
+            background: #202024;
+            border: 1px solid #3f3f46;
+            border-radius: 10px;
+            padding: 6px 12px;
+            gap: 8px;
+            font-size: 13px;
+            color: #a1a1aa;
+        }
+        .custom-input-box:focus-within {
+            border-color: #10b981;
+        }
+        .custom-num-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #00e676;
+            font-size: 15px;
+            font-weight: 700;
+            outline: none;
+            text-align: right;
+            padding-right: 4px;
+        }
+        .custom-num-input::placeholder {
+            color: #52525b;
+            font-weight: 400;
+            font-size: 13px;
+        }
+
+        /* 抽屜底部確認按鈕 */
+        .drawer-footer {
+            padding: 12px 18px 20px;
+            border-top: 1px solid #27272a;
+            background: #18181b;
+            flex-shrink: 0;
+        }
+        .btn-confirm-apply {
+            width: 100%;
+            padding: 13px;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #fff;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .btn-confirm-apply:active {
+            opacity: 0.9;
+        }
+
         /* 底部浮動卡片 */
         #detail-card {
             position: absolute;
             bottom: 16px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 92%;
+            left: 12px;
+            right: 12px;
             max-width: 440px;
-            background: rgba(26, 26, 30, 0.96);
-            backdrop-filter: blur(12px);
-            border: 1px solid #3b82f6;
-            border-radius: 12px;
+            margin: 0 auto;
+            background: #27272a;
+            border: 1px solid #3f3f46;
+            border-radius: 14px;
             padding: 14px 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6);
             display: none;
-            z-index: 1001;
+            z-index: 1000;
         }
         .card-header {
             display: flex;
@@ -217,159 +444,271 @@
             margin-bottom: 6px;
         }
         .card-title {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 700;
             color: #fff;
-            max-width: 85%;
             line-height: 1.3;
+            flex: 1;
+            margin-right: 8px;
         }
         .card-close {
-            background: none;
-            border: none;
             color: #a1a1aa;
-            font-size: 20px;
+            font-size: 16px;
             cursor: pointer;
-            padding: 0 4px;
+            padding: 2px 6px;
         }
-        .card-props {
+        .card-tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 5px;
             margin-bottom: 8px;
-            font-size: 13px;
-            align-items: center;
         }
-        .card-price {
-            color: #f59e0b;
-            font-weight: 700;
-            font-size: 17px;
-        }
-        .card-fee {
-            color: #94a3b8;
-            font-size: 12px;
-            background: #1e293b;
-            padding: 2px 6px;
-            border-radius: 4px;
-        }
-        .card-subsidy-badge {
-            background: #ec4899;
-            color: #fff;
+        .tag {
             font-size: 11px;
-            font-weight: 700;
-            padding: 2px 6px;
+            padding: 2px 7px;
             border-radius: 4px;
+            font-weight: 600;
         }
-        .card-bus-info {
-            background: #1e293b;
-            border-left: 3px solid #38bdf8;
-            padding: 8px 10px;
-            border-radius: 4px;
+        .tag-match { background: #065f46; color: #34d399; }
+        .tag-potential { background: #92400e; color: #fde68a; }
+        .tag-general { background: #3f3f46; color: #d4d4d8; }
+        .tag-subsidy { background: #831843; color: #fbcfe8; }
+        .tag-commute { background: #1e3a8a; color: #93c5fd; }
+        .card-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
             font-size: 12px;
-            color: #cbd5e1;
-            line-height: 1.45;
+            color: #d4d4d8;
             margin-bottom: 10px;
+            background: #18181b;
+            padding: 8px 10px;
+            border-radius: 8px;
         }
-        .card-bus-info b {
-            color: #38bdf8;
+        .card-metrics b { color: #00e676; }
+        .card-commute {
+            font-size: 12px;
+            color: #e2e8f0;
+            background: #1e293b;
+            padding: 8px 10px;
+            border-radius: 8px;
+            border-left: 3px solid #38bdf8;
+            margin-bottom: 10px;
+            line-height: 1.4;
         }
-        .card-link {
-            display: block;
+        .card-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .card-btn {
+            flex: 1;
             text-align: center;
             background: #00e676;
             color: #000;
-            font-weight: 700;
-            padding: 9px 0;
-            border-radius: 6px;
+            padding: 8px;
+            border-radius: 8px;
             text-decoration: none;
-            font-size: 13px;
+            font-size: 12px;
+            font-weight: 700;
         }
     </style>
 </head>
 <body>
-    <!-- 密碼認證層 -->
+
+    <!-- 密碼保護遮罩 -->
     <div id="auth-overlay">
-        <div class="auth-box">
-            <div class="auth-icon">🛡️</div>
-            <div class="auth-title">希干希納區・情報安全認證</div>
-            <div class="auth-desc">此地圖包含租屋大數據與公司通勤幾何機密，請輸入專屬通行碼以解鎖地圖：</div>
-            <input type="password" id="pass-input" class="auth-input" placeholder="請輸入通行密碼" autofocus />
-            <button class="auth-btn" onclick="verifyPasscode()">解鎖進入地圖 ↗</button>
-            <div id="auth-msg" class="auth-error">密碼錯誤，請重新輸入！</div>
+        <div class="auth-card">
+            <div style="font-size:40px; margin-bottom:12px;">🛡️</div>
+            <div class="auth-title">希干希納區・指揮部驗證</div>
+            <div class="auth-desc">此地圖包含雙北租屋大數據、公司精確坐標與通勤軌跡。請輸入存取密鑰：</div>
+            <input type="password" id="pass-input" class="auth-input" placeholder="請輸入通行密碼" autofocus>
+            <button class="auth-btn" onclick="verifyPasscode()">立即解鎖地圖</button>
+            <div id="auth-msg" class="auth-error">❌ 通行密鑰錯誤，請重新確認！</div>
         </div>
     </div>
 
+    <!-- 頂部純淨導航列 -->
     <header>
         <div class="header-title">
-            <span>🏠</span> 希干希納區・租屋幾何地圖
+            <span>🏠</span> 希干希納區・租屋地圖
         </div>
-        <div class="stats-bar">
-            <div class="stat-item">目前顯示: <b id="stat-shown">0</b> 筆</div>
-            <div class="stat-item">站點: <b id="stat-stops">78</b></div>
+        <div class="header-actions">
+            <div class="stat-badge">顯示: <b id="stat-shown">0</b> 筆</div>
+            <button class="btn-filter-trigger" onclick="openFilterModal()">
+                <span>⚙️ 條件篩選</span>
+                <span id="header-filter-dot" class="filter-active-dot"></span>
+            </button>
         </div>
     </header>
 
-    <!-- 6 大維度過濾面板 -->
-    <div class="filter-panel">
-        <!-- 1. 通勤模式 & 租金補貼 -->
-        <div class="filter-row">
-            <span class="filter-label">🚍 通勤：</span>
-            <span class="filter-chip active" onclick="setTransit('all', this)">全部</span>
-            <span class="filter-chip" onclick="setTransit('bus', this)">僅直達公車</span>
-            <span class="filter-chip" onclick="setTransit('mrt', this)">僅捷運生活圈</span>
-            <span class="filter-label" style="margin-left:8px;">🏷️ 租補：</span>
-            <span class="filter-chip subsidy" id="chip-subsidy" onclick="toggleSubsidy(this)">可申請租金補貼</span>
-        </div>
-        <!-- 2. 坪數 (最小單向) & 租金 (最大上限) -->
-        <div class="filter-row">
-            <span class="filter-label">📐 坪數：</span>
-            <span class="filter-chip active" onclick="setMinArea(0, this)">不限</span>
-            <span class="filter-chip" onclick="setMinArea(15, this)">15坪+</span>
-            <span class="filter-chip" onclick="setMinArea(20, this)">20坪+ (天選)</span>
-            <span class="filter-chip" onclick="setMinArea(25, this)">25坪+</span>
-            <span class="filter-label" style="margin-left:8px;">💰 租金：</span>
-            <span class="filter-chip active" onclick="setMaxPrice(999999, this)">不限</span>
-            <span class="filter-chip" onclick="setMaxPrice(20000, this)">2萬內 (天選)</span>
-            <span class="filter-chip" onclick="setMaxPrice(23000, this)">2.3萬內</span>
-            <span class="filter-chip" onclick="setMaxPrice(26000, this)">2.6萬內</span>
-        </div>
-        <!-- 3. 建物型態 & 樓層上限 -->
-        <div class="filter-row">
-            <span class="filter-label">🏢 型態：</span>
-            <span class="filter-chip active" onclick="setBuilding('all', this)">不限</span>
-            <span class="filter-chip" onclick="setBuilding('電梯大樓', this)">電梯大樓</span>
-            <span class="filter-chip" onclick="setBuilding('華廈', this)">華廈</span>
-            <span class="filter-chip" onclick="setBuilding('公寓', this)">公寓</span>
-            <span class="filter-label" style="margin-left:8px;">🪜 樓層：</span>
-            <span class="filter-chip active" onclick="setMaxFloor(99, this)">不限</span>
-            <span class="filter-chip" onclick="setMaxFloor(5, this)">5樓以下</span>
-            <span class="filter-chip" onclick="setMaxFloor(10, this)">10樓以下</span>
-            <span class="filter-chip" onclick="setMaxFloor(15, this)">15樓以下</span>
-        </div>
-    </div>
-
+    <!-- 地圖主容器 -->
     <div id="map"></div>
 
-    <div id="detail-card">
-        <div class="card-header">
-            <div class="card-title" id="c-title">房源標題</div>
-            <button class="card-close" onclick="closeCard()">✕</button>
-        </div>
-        <div class="card-props">
-            <div class="card-price" id="c-price">20,000 元/月</div>
-            <div class="card-fee" id="c-fee">管理費 0 元</div>
-            <div id="c-spec">28.7坪・電梯大樓</div>
-            <div id="c-subsidy-tag" class="card-subsidy-badge">可租補</div>
-        </div>
-        <div class="card-bus-info" id="c-bus">
-            🚏 <b>最近直達公車站</b>：公崙新村 (距 124m・步行 2分)<br>
-            🚌 <b>可搭直達公車</b>：905 / 906 經水源快直達敦化和平路口
-        </div>
-        <a href="#" target="_blank" class="card-link" id="c-link">點此前往 591 詳情頁賞屋 ↗</a>
+    <!-- 右下角懸浮按鈕 (FAB: 方便單手點選) -->
+    <div class="fab-filter" onclick="openFilterModal()" title="開啟複合條件篩選">
+        <div>🔍</div>
+        <div class="fab-label">篩選</div>
     </div>
 
-    <!-- Leaflet JS & MarkerCluster JS -->
+    <!-- 彈出式篩選抽屜 (Bottom Sheet Modal) -->
+    <div id="modal-overlay" class="modal-overlay" onclick="closeFilterModal(event)">
+        <div id="filter-drawer" class="filter-drawer" onclick="event.stopPropagation()">
+            <!-- 抽屜頂部 -->
+            <div class="drawer-header">
+                <div class="drawer-handle"></div>
+                <div class="drawer-title">⚙️ 複合條件自訂篩選</div>
+                <div class="drawer-header-actions">
+                    <button class="btn-reset-all" onclick="resetAllFilters()">🔄 重設全部</button>
+                    <div class="btn-close-drawer" onclick="closeFilterModal()">✕</div>
+                </div>
+            </div>
+
+            <!-- 抽屜內容 -->
+            <div class="drawer-content">
+                <!-- 1. 坪數要求 (單向最小，沒人嫌大) -->
+                <div class="filter-section">
+                    <div class="section-header">
+                        <span class="section-title">📐 最小坪數要求</span>
+                        <span class="section-subtext">沒人會嫌大，設定下限即可</span>
+                    </div>
+                    <div class="chip-group" id="chips-area">
+                        <span class="chip-btn active" data-val="0" onclick="selectAreaChip(0, this)">不限</span>
+                        <span class="chip-btn" data-val="15" onclick="selectAreaChip(15, this)">15坪+</span>
+                        <span class="chip-btn" data-val="20" onclick="selectAreaChip(20, this)">20坪+ (天選)</span>
+                        <span class="chip-btn" data-val="25" onclick="selectAreaChip(25, this)">25坪+</span>
+                        <span class="chip-btn" data-val="30" onclick="selectAreaChip(30, this)">30坪+</span>
+                    </div>
+                    <div class="custom-input-box">
+                        <span>自填最小坪數：</span>
+                        <input type="number" id="input-min-area" class="custom-num-input" placeholder="例: 18.5" step="0.5" min="0" oninput="onAreaInputChange()">
+                        <span>坪以上</span>
+                    </div>
+                </div>
+
+                <!-- 2. 租金上限 (單向最大，沒人嫌便宜) -->
+                <div class="filter-section">
+                    <div class="section-header">
+                        <span class="section-title">💰 租金上限</span>
+                        <span class="section-subtext">主租金最大上限 (管理費分開)</span>
+                    </div>
+                    <div class="chip-group" id="chips-price">
+                        <span class="chip-btn active" data-val="999999" onclick="selectPriceChip(999999, this)">不限</span>
+                        <span class="chip-btn" data-val="20000" onclick="selectPriceChip(20000, this)">2萬內 (天選)</span>
+                        <span class="chip-btn" data-val="23000" onclick="selectPriceChip(23000, this)">2.3萬內</span>
+                        <span class="chip-btn" data-val="26000" onclick="selectPriceChip(26000, this)">2.6萬內</span>
+                        <span class="chip-btn" data-val="30000" onclick="selectPriceChip(30000, this)">3萬內</span>
+                    </div>
+                    <div class="custom-input-box">
+                        <span>自填租金上限：</span>
+                        <input type="number" id="input-max-price" class="custom-num-input" placeholder="例: 21000" step="500" min="0" oninput="onPriceInputChange()">
+                        <span>元/月以下</span>
+                    </div>
+                </div>
+
+                <!-- 3. 管理費上限 -->
+                <div class="filter-section">
+                    <div class="section-header">
+                        <span class="section-title">💵 管理費上限</span>
+                        <span class="section-subtext">獨立管理費分離過濾</span>
+                    </div>
+                    <div class="chip-group" id="chips-mfee">
+                        <span class="chip-btn active" data-val="99999" onclick="selectMfeeChip(99999, this)">不限</span>
+                        <span class="chip-btn" data-val="1500" onclick="selectMfeeChip(1500, this)">1,500內</span>
+                        <span class="chip-btn" data-val="3000" onclick="selectMfeeChip(3000, this)">3,000內</span>
+                    </div>
+                    <div class="custom-input-box">
+                        <span>自填管理費上限：</span>
+                        <input type="number" id="input-max-mfee" class="custom-num-input" placeholder="例: 2500" step="100" min="0" oninput="onMfeeInputChange()">
+                        <span>元/月以下</span>
+                    </div>
+                </div>
+
+                <!-- 4. 交通通勤模式 -->
+                <div class="filter-section">
+                    <div class="section-header">
+                        <span class="section-title">🚍 交通通勤模式</span>
+                    </div>
+                    <div class="chip-group" id="chips-transit">
+                        <span class="chip-btn active" onclick="setTransitFilter('all', this)">全部</span>
+                        <span class="chip-btn" onclick="setTransitFilter('mrt', this)">🚇 僅捷運生活圈 (紅樹林/文山)</span>
+                        <span class="chip-btn" onclick="setTransitFilter('bus', this)">🚏 僅直達公車沿線 (新店安坑等)</span>
+                    </div>
+                </div>
+
+                <!-- 5. 建物型態 -->
+                <div class="filter-section">
+                    <div class="section-header">
+                        <span class="section-title">🏢 建物型態</span>
+                        <span class="section-subtext">6樓以上依法必有電梯</span>
+                    </div>
+                    <div class="chip-group" id="chips-building">
+                        <span class="chip-btn active" onclick="setBuildingFilter('all', this)">全部型態</span>
+                        <span class="chip-btn" onclick="setBuildingFilter('電梯大樓', this)">電梯大樓 (8樓+)</span>
+                        <span class="chip-btn" onclick="setBuildingFilter('華廈', this)">華廈 (電梯7樓以下)</span>
+                        <span class="chip-btn" onclick="setBuildingFilter('公寓', this)">公寓 (無電梯)</span>
+                    </div>
+                </div>
+
+                <!-- 6. 所在樓層上限 -->
+                <div class="filter-section">
+                    <div class="section-header">
+                        <span class="section-title">🪜 所在樓層上限</span>
+                        <span class="section-subtext">電梯大樓免爬高自動豁免</span>
+                    </div>
+                    <div class="chip-group" id="chips-floor">
+                        <span class="chip-btn active" data-val="99" onclick="selectFloorChip(99, this)">不限</span>
+                        <span class="chip-btn" data-val="4" onclick="selectFloorChip(4, this)">4樓以下</span>
+                        <span class="chip-btn" data-val="6" onclick="selectFloorChip(6, this)">6樓以下</span>
+                        <span class="chip-btn" data-val="10" onclick="selectFloorChip(10, this)">10樓以下</span>
+                    </div>
+                    <div class="custom-input-box">
+                        <span>自填最高樓層：</span>
+                        <input type="number" id="input-max-floor" class="custom-num-input" placeholder="例: 5" step="1" min="1" oninput="onFloorInputChange()">
+                        <span>樓以下</span>
+                    </div>
+                </div>
+
+                <!-- 7. 租金補貼 -->
+                <div class="filter-section">
+                    <div class="section-header">
+                        <span class="section-title">🏷️ 租金補貼 / 社會住宅</span>
+                    </div>
+                    <div class="chip-group" id="chips-subsidy">
+                        <span class="chip-btn active" onclick="setSubsidyFilter(false, this)">全部房源</span>
+                        <span class="chip-btn subsidy" onclick="setSubsidyFilter(true, this)">🎫 僅看可租補/社會住宅/可報稅</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 抽屜底部確認按鈕 -->
+            <div class="drawer-footer">
+                <button class="btn-confirm-apply" onclick="confirmApplyFilters()">
+                    <span>🎯 確認套用篩選</span>
+                    <span>(符合 <span id="modal-match-count">0</span> 筆)</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部房源詳情浮動卡片 -->
+    <div id="detail-card">
+        <div class="card-header">
+            <div class="card-title" id="card-title">房源標題</div>
+            <div class="card-close" onclick="closeDetailCard()">✕</div>
+        </div>
+        <div class="card-tags" id="card-tags"></div>
+        <div class="card-metrics" id="card-metrics"></div>
+        <div class="card-commute" id="card-commute"></div>
+        <div class="card-actions">
+            <a id="card-link" href="#" target="_blank" class="card-btn">🔗 前往 591 查看詳細房源</a>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Leaflet MarkerCluster JS -->
     <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+
     <script>
         const EXPECTED_HASH = "41d3ac2ab48314132906cd35a333487f260db43874ba0104d3078d5db1191172";
         const companyInfo = {"name": "公司總部 (敦化南路二段333號)", "address": "台北市大安區敦化南路二段333號", "lat": 25.0237672, "lon": 121.5490011, "stop": "敦化和平路口 / 和平高中"};
@@ -427,14 +766,15 @@
         const allMarkers = [];
         let activeLine = null;
 
-        // 當前 6 大過濾狀態
+        // 6 大複合過濾狀態
         let currentFilters = {
-            transit: 'all',     // 'all' | 'bus' | 'mrt'
-            minArea: 0,         // 最小坪數
-            maxPrice: 999999,   // 最高租金
-            onlySubsidy: false, // 僅限可租補
-            building: 'all',    // 'all' | '電梯大樓' | '華廈' | '公寓'
-            maxFloor: 99        // 幾樓以下
+            transit: 'all',       // 'all' | 'bus' | 'mrt'
+            minArea: 0,           // 最小坪數 (float)
+            maxPrice: 999999,     // 最高租金 (int)
+            maxMfee: 99999,       // 最高管理費 (int)
+            onlySubsidy: false,   // 僅限可租補 (bool)
+            building: 'all',      // 'all' | '電梯大樓' | '華廈' | '公寓'
+            maxFloor: 99          // 幾樓以下 (int)
         };
 
         function initMap() {
@@ -442,7 +782,7 @@
             map = L.map('map', {
                 zoomControl: true,
                 maxZoom: 19
-            }).setView([25.01, 121.52], 12);
+            }).setView([25.08, 121.50], 12);
 
             // 1. 全球權威 Esri 高清中文街道路網 (100% 免 API Key)
             const esriStreet = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
@@ -481,39 +821,39 @@
                     <b style="font-size:15px; color:#d97706;">🏢 公司總部目的地</b><br>
                     <b>${companyInfo.name}</b><br>
                     下車站牌：<b>${companyInfo.stop}</b><br>
-                    <i style="color:#666;">所有直達公車路線之終點下車處</i>
+                    <span style="color:#6b7280; font-size:11px;">${companyInfo.address}</span>
                 </div>
             `);
 
-            // 3. 78 個直達公車站與 500m 綠色半透明光圈
+            // 3. 直達公車站點與 500m 光圈
             stopsLayer = L.layerGroup().addTo(map);
-            const busStopIcon = L.divIcon({
-                className: 'bus-marker',
-                html: '<div style="background:#0284c7; color:#fff; font-size:11px; border:1.5px solid #fff; border-radius:50%; width:22px; height:22px; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 6px rgba(0,0,0,0.3); opacity:0.9;">🚏</div>',
-                iconSize: [22, 22],
-                iconAnchor: [11, 11]
-            });
-
             stopsList.forEach(s => {
+                L.circle([s.lat, s.lon], {
+                    radius: 500,
+                    color: '#0284c7',
+                    fillColor: '#38bdf8',
+                    fillOpacity: 0.08,
+                    weight: 1,
+                    dashArray: '3, 6'
+                }).addTo(stopsLayer);
+
+                const busStopIcon = L.divIcon({
+                    className: 'bus-stop-marker',
+                    html: '<div style="background:#0284c7; color:#fff; font-size:11px; border:1px solid #fff; border-radius:50%; width:20px; height:20px; display:flex; align-items:center; justify-content:center; box-shadow:0 1px 4px rgba(0,0,0,0.3); opacity:0.85;">🚏</div>',
+                    iconSize: [20, 20],
+                    iconAnchor: [10, 10]
+                });
                 const m = L.marker([s.lat, s.lon], { icon: busStopIcon }).addTo(stopsLayer);
                 m.bindPopup(`
-                    <div style="font-size:13px; min-width:200px;">
-                        <b style="color:#0284c7; font-size:14px;">🚏 直達公車站：${s.name}</b><br>
-                        可搭直達路線：<b style="color:#0284c7;">${s.routes.join(' / ')}</b><br>
-                        <span style="color:#16a34a; font-size:12px;">🟢 綠色光圈內為 500m 舒適步行圈</span>
+                    <div style="font-size:12px;">
+                        <b>🚏 直達站牌：${s.name}</b><br>
+                        可搭乘：<b style="color:#0284c7;">${s.routes.join(', ')}</b><br>
+                        <span style="color:#10b981; font-weight:600;">🔵 直徑 500m 黃金步行圈</span>
                     </div>
                 `);
-                L.circle([s.lat, s.lon], {
-                    color: '#0284c7',
-                    fillColor: '#10b981',
-                    fillOpacity: 0.12,
-                    weight: 1.5,
-                    dashArray: '3, 4',
-                    radius: 500
-                }).addTo(stopsLayer);
             });
 
-            // 4. 房源點位 (MarkerCluster)
+            // 4. 房源點位 (整合 Leaflet.markercluster)
             clusterGroup = L.markerClusterGroup({
                 maxClusterRadius: 40,
                 spiderfyOnMaxZoom: true,
@@ -557,6 +897,32 @@
             applyCombinedFilters();
         }
 
+        // 判定單筆資料是否通過當前過濾器
+        function checkPassFilter(d) {
+            // 1. 交通模式
+            if (currentFilters.transit !== 'all' && d.transit_type !== currentFilters.transit) return false;
+
+            // 2. 最小坪數 (沒人嫌大)
+            if (d.area < currentFilters.minArea) return false;
+
+            // 3. 最高租金 (沒人嫌便宜)
+            if (d.price > currentFilters.maxPrice) return false;
+
+            // 4. 管理費上限
+            if (d.management_fee > currentFilters.maxMfee) return false;
+
+            // 5. 租金補貼
+            if (currentFilters.onlySubsidy && d.has_subsidy !== 1) return false;
+
+            // 6. 建物型態
+            if (currentFilters.building !== 'all' && d.building_type !== currentFilters.building) return false;
+
+            // 7. 幾樓以下 (電梯大樓自動豁免爬高)
+            if (d.has_elevator !== 1 && d.floor_num > currentFilters.maxFloor) return false;
+
+            return true;
+        }
+
         // 複合過濾引擎 (即時響應 6 大條件)
         function applyCombinedFilters() {
             if (!clusterGroup) return;
@@ -564,124 +930,261 @@
             let count = 0;
 
             allMarkers.forEach(m => {
-                const d = m.rentalData;
-                let pass = true;
-
-                // 1. 通勤模式
-                if (currentFilters.transit !== 'all' && d.transit_type !== currentFilters.transit) pass = false;
-
-                // 2. 最小坪數 (沒人嫌大)
-                if (d.area < currentFilters.minArea) pass = false;
-
-                // 3. 最高租金 (沒人嫌便宜)
-                if (d.price > currentFilters.maxPrice) pass = false;
-
-                // 4. 租金補貼
-                if (currentFilters.onlySubsidy && d.has_subsidy !== 1) pass = false;
-
-                // 5. 建物型態
-                if (currentFilters.building !== 'all' && d.building_type !== currentFilters.building) pass = false;
-
-                // 6. 幾樓以下
-                if (d.floor_num > currentFilters.maxFloor) pass = false;
-
-                if (pass) {
+                if (checkPassFilter(m.rentalData)) {
                     clusterGroup.addLayer(m);
                     count++;
                 }
             });
 
             document.getElementById('stat-shown').innerText = count;
+            updateFilterActiveIndicators();
         }
 
-        // 過濾器切換觸發器
-        function setTransit(val, el) {
+        // 計算彈出視窗內的預覽符合筆數
+        function updateModalPreviewCount() {
+            let count = 0;
+            allMarkers.forEach(m => {
+                if (checkPassFilter(m.rentalData)) count++;
+            });
+            const countEl = document.getElementById('modal-match-count');
+            if (countEl) countEl.innerText = count;
+        }
+
+        // 標記是否有啟用自訂過濾
+        function updateFilterActiveIndicators() {
+            const isFiltered = (
+                currentFilters.transit !== 'all' ||
+                currentFilters.minArea > 0 ||
+                currentFilters.maxPrice < 999999 ||
+                currentFilters.maxMfee < 99999 ||
+                currentFilters.onlySubsidy ||
+                currentFilters.building !== 'all' ||
+                currentFilters.maxFloor < 99
+            );
+            const dot = document.getElementById('header-filter-dot');
+            if (dot) dot.style.display = isFiltered ? 'inline-block' : 'none';
+        }
+
+        // 彈出式 Modal 開關
+        function openFilterModal() {
+            document.getElementById('modal-overlay').classList.add('open');
+            document.getElementById('filter-drawer').classList.add('open');
+            updateModalPreviewCount();
+        }
+
+        function closeFilterModal(e) {
+            if (e && e.target !== document.getElementById('modal-overlay') && !e.target.classList.contains('btn-close-drawer')) return;
+            document.getElementById('modal-overlay').classList.remove('open');
+            document.getElementById('filter-drawer').classList.remove('open');
+        }
+
+        function confirmApplyFilters() {
+            applyCombinedFilters();
+            document.getElementById('modal-overlay').classList.remove('open');
+            document.getElementById('filter-drawer').classList.remove('open');
+        }
+
+        // 重設全部過濾條件
+        function resetAllFilters() {
+            currentFilters = {
+                transit: 'all',
+                minArea: 0,
+                maxPrice: 999999,
+                maxMfee: 99999,
+                onlySubsidy: false,
+                building: 'all',
+                maxFloor: 99
+            };
+
+            // 重設輸入框
+            document.getElementById('input-min-area').value = '';
+            document.getElementById('input-max-price').value = '';
+            document.getElementById('input-max-mfee').value = '';
+            document.getElementById('input-max-floor').value = '';
+
+            // 重設所有 chips active
+            resetGroupActive('chips-area', 0);
+            resetGroupActive('chips-price', 999999);
+            resetGroupActive('chips-mfee', 99999);
+            resetGroupActive('chips-floor', 99);
+            resetGroupTextActive('chips-transit', '全部');
+            resetGroupTextActive('chips-building', '全部型態');
+            resetGroupTextActive('chips-subsidy', '全部房源');
+
+            updateModalPreviewCount();
+            applyCombinedFilters();
+        }
+
+        function resetGroupActive(containerId, defaultVal) {
+            const c = document.getElementById(containerId);
+            if (!c) return;
+            c.querySelectorAll('.chip-btn').forEach(b => {
+                b.classList.toggle('active', b.getAttribute('data-val') == defaultVal);
+            });
+        }
+
+        function resetGroupTextActive(containerId, defaultText) {
+            const c = document.getElementById(containerId);
+            if (!c) return;
+            c.querySelectorAll('.chip-btn').forEach(b => {
+                b.classList.toggle('active', b.innerText.includes(defaultText));
+            });
+        }
+
+        // 1. 坪數操作 (快捷標籤 + 自填輸入框雙向同步)
+        function selectAreaChip(val, el) {
+            currentFilters.minArea = parseFloat(val);
+            document.getElementById('input-min-area').value = val > 0 ? val : '';
+            updateChipsInGroup('chips-area', el);
+            updateModalPreviewCount();
+        }
+
+        function onAreaInputChange() {
+            const val = parseFloat(document.getElementById('input-min-area').value);
+            currentFilters.minArea = isNaN(val) ? 0 : val;
+            syncChipActiveByVal('chips-area', currentFilters.minArea);
+            updateModalPreviewCount();
+        }
+
+        // 2. 租金操作 (快捷標籤 + 自填輸入框雙向同步)
+        function selectPriceChip(val, el) {
+            currentFilters.maxPrice = parseInt(val, 10);
+            document.getElementById('input-max-price').value = val < 999999 ? val : '';
+            updateChipsInGroup('chips-price', el);
+            updateModalPreviewCount();
+        }
+
+        function onPriceInputChange() {
+            const val = parseInt(document.getElementById('input-max-price').value, 10);
+            currentFilters.maxPrice = isNaN(val) || val <= 0 ? 999999 : val;
+            syncChipActiveByVal('chips-price', currentFilters.maxPrice);
+            updateModalPreviewCount();
+        }
+
+        // 3. 管理費操作 (快捷標籤 + 自填輸入框雙向同步)
+        function selectMfeeChip(val, el) {
+            currentFilters.maxMfee = parseInt(val, 10);
+            document.getElementById('input-max-mfee').value = val < 99999 ? val : '';
+            updateChipsInGroup('chips-mfee', el);
+            updateModalPreviewCount();
+        }
+
+        function onMfeeInputChange() {
+            const val = parseInt(document.getElementById('input-max-mfee').value, 10);
+            currentFilters.maxMfee = isNaN(val) || val <= 0 ? 99999 : val;
+            syncChipActiveByVal('chips-mfee', currentFilters.maxMfee);
+            updateModalPreviewCount();
+        }
+
+        // 4. 交通模式
+        function setTransitFilter(val, el) {
             currentFilters.transit = val;
-            updateChips(el);
-            applyCombinedFilters();
+            updateChipsInGroup('chips-transit', el);
+            updateModalPreviewCount();
         }
 
-        function setMinArea(val, el) {
-            currentFilters.minArea = val;
-            updateChips(el);
-            applyCombinedFilters();
-        }
-
-        function setMaxPrice(val, el) {
-            currentFilters.maxPrice = val;
-            updateChips(el);
-            applyCombinedFilters();
-        }
-
-        function toggleSubsidy(el) {
-            currentFilters.onlySubsidy = !currentFilters.onlySubsidy;
-            el.classList.toggle('active', currentFilters.onlySubsidy);
-            applyCombinedFilters();
-        }
-
-        function setBuilding(val, el) {
+        // 5. 建物型態
+        function setBuildingFilter(val, el) {
             currentFilters.building = val;
-            updateChips(el);
-            applyCombinedFilters();
+            updateChipsInGroup('chips-building', el);
+            updateModalPreviewCount();
         }
 
-        function setMaxFloor(val, el) {
-            currentFilters.maxFloor = val;
-            updateChips(el);
-            applyCombinedFilters();
+        // 6. 樓層操作 (快捷標籤 + 自填輸入框雙向同步)
+        function selectFloorChip(val, el) {
+            currentFilters.maxFloor = parseInt(val, 10);
+            document.getElementById('input-max-floor').value = val < 99 ? val : '';
+            updateChipsInGroup('chips-floor', el);
+            updateModalPreviewCount();
         }
 
-        function updateChips(targetEl) {
-            const parent = targetEl.parentElement;
-            parent.querySelectorAll('.filter-chip:not(.subsidy)').forEach(c => c.classList.remove('active'));
-            targetEl.classList.add('active');
+        function onFloorInputChange() {
+            const val = parseInt(document.getElementById('input-max-floor').value, 10);
+            currentFilters.maxFloor = isNaN(val) || val <= 0 ? 99 : val;
+            syncChipActiveByVal('chips-floor', currentFilters.maxFloor);
+            updateModalPreviewCount();
         }
 
+        // 7. 租補過濾
+        function setSubsidyFilter(val, el) {
+            currentFilters.onlySubsidy = val;
+            updateChipsInGroup('chips-subsidy', el);
+            updateModalPreviewCount();
+        }
+
+        function updateChipsInGroup(groupId, activeEl) {
+            const group = document.getElementById(groupId);
+            if (!group) return;
+            group.querySelectorAll('.chip-btn').forEach(b => b.classList.remove('active'));
+            if (activeEl) activeEl.classList.add('active');
+        }
+
+        function syncChipActiveByVal(groupId, currentVal) {
+            const group = document.getElementById(groupId);
+            if (!group) return;
+            group.querySelectorAll('.chip-btn').forEach(b => {
+                const chipVal = b.getAttribute('data-val');
+                b.classList.toggle('active', chipVal !== null && parseFloat(chipVal) === parseFloat(currentVal));
+            });
+        }
+
+        // 畫出房源與直達站牌連線
         function drawLineToStop(r) {
-            if (activeLine) map.removeLayer(activeLine);
-            activeLine = L.polyline([[r.lat, r.lon], [r.stop_lat, r.stop_lon]], {
-                color: '#f59e0b',
-                weight: 3.5,
-                dashArray: '6, 8',
-                opacity: 0.95
-            }).addTo(map);
+            if (activeLine) {
+                map.removeLayer(activeLine);
+                activeLine = null;
+            }
+            if (r.nearest_stop && r.stop_lat && r.stop_lon) {
+                activeLine = L.polyline([[r.lat, r.lon], [r.stop_lat, r.stop_lon]], {
+                    color: '#00e676',
+                    weight: 3,
+                    dashArray: '5, 8',
+                    opacity: 0.8
+                }).addTo(map);
+            }
         }
 
+        // 底部詳情卡片
         function showDetailCard(r) {
             const card = document.getElementById('detail-card');
-            document.getElementById('c-title').innerText = r.title;
-            document.getElementById('c-price').innerText = `${r.price.toLocaleString()} 元/月`;
-            document.getElementById('c-fee').innerText = r.management_fee > 0 ? `管理費 ${r.management_fee.toLocaleString()} 元` : '免/含管理費';
-            document.getElementById('c-spec').innerText = `${r.area} 坪・${r.building_type} (${r.floor})`;
-            
-            const subTag = document.getElementById('c-subsidy-tag');
-            if (r.has_subsidy === 1) {
-                subTag.style.display = 'inline-block';
-                subTag.innerText = '✅ 可申請租金補貼/社宅';
-            } else {
-                subTag.style.display = 'none';
-            }
+            document.getElementById('card-title').innerText = r.title;
 
-            document.getElementById('c-bus').innerHTML = `
-                🚏 <b>最近直達公車站</b>：【${r.nearest_stop}】(距 <b>${r.distance_m}m</b>・步行約 <b>${r.walk_min} 分鐘</b>)<br>
-                🚌 <b>直達公司路線</b>：可搭 <b>[${r.routes_str}]</b> 直達敦化和平路口
+            // Tags
+            let catTag = '';
+            if (r.category === 'match') catTag = '<span class="tag tag-match">⭐️ 天選符合 (20坪/2萬/電梯)</span>';
+            else if (r.category === 'potential') catTag = '<span class="tag tag-potential">⚡️ 撿漏潛力物件</span>';
+            else catTag = '<span class="tag tag-general">🏠 一般房源</span>';
+
+            const subTag = r.has_subsidy === 1 ? '<span class="tag tag-subsidy">🎫 可申請租金補貼/社宅</span>' : '';
+            const transitTag = r.transit_type === 'mrt' ? '<span class="tag tag-commute">🚇 捷運生活圈</span>' : '<span class="tag tag-commute">🚏 直達公車圈</span>';
+            document.getElementById('card-tags').innerHTML = catTag + subTag + transitTag;
+
+            // Metrics (租金與管理費分開)
+            const mFeeStr = r.management_fee > 0 ? `${r.management_fee} 元` : '無或內含';
+            document.getElementById('card-metrics').innerHTML = `
+                <div>月租金：<b>${r.price.toLocaleString()}</b> 元</div>
+                <div>管理費：<b>${mFeeStr}</b></div>
+                <div>主建物：<b>${r.area}</b> 坪 (${r.layout})</div>
+                <div>型態樓層：<b>${r.building_type}</b> (${r.floor})</div>
             `;
-            document.getElementById('c-link').href = r.url;
+
+            // Commute
+            document.getElementById('card-commute').innerHTML = `
+                <b>🚶 步行到直達站：</b>距【<b>${r.nearest_stop}</b>】約 <b>${Math.round(r.distance_m)}</b> 公尺 (步行約 <b>${r.walk_min}</b> 分鐘)<br>
+                <b>🚍 直達交通：</b>[${r.routes_str}] 直達敦化和平路口 (公司總部)
+            `;
+
+            // Link
+            document.getElementById('card-link').href = r.url;
+
             card.style.display = 'block';
         }
 
-        function closeCard() {
+        function closeDetailCard() {
             document.getElementById('detail-card').style.display = 'none';
-            if (activeLine) map.removeLayer(activeLine);
-        }
-
-        let showStops = true;
-        function toggleStops() {
-            showStops = !showStops;
-            if (showStops) {
-                map.addLayer(stopsLayer);
-            } else {
-                map.removeLayer(stopsLayer);
+            if (activeLine) {
+                map.removeLayer(activeLine);
+                activeLine = null;
             }
         }
     </script>
