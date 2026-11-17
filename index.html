@@ -305,33 +305,6 @@
             cursor: pointer;
         }
 
-        /* 頂部吸頂大按鈕 (一打開第一眼即見) */
-        .drawer-top-action {
-            padding: 8px 16px;
-            background: #202024;
-            border-bottom: 1px solid #27272a;
-            flex-shrink: 0;
-        }
-        .btn-hero-apply {
-            width: 100%;
-            padding: 10px;
-            border-radius: 10px;
-            border: none;
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: #fff;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.35);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-        }
-        .btn-hero-apply:active {
-            opacity: 0.9;
-        }
-
         /* 抽屜內容 (可滾動區) */
         .drawer-content {
             padding: 14px 18px 24px;
@@ -598,14 +571,6 @@
                     <button class="btn-reset-all" onclick="resetAllFilters()">🔄 重設</button>
                     <div class="btn-close-drawer" onclick="closeFilterModal()">✕</div>
                 </div>
-            </div>
-
-            <!-- 頂部吸頂大按鈕 (一打開第一眼即見) -->
-            <div class="drawer-top-action">
-                <button class="btn-hero-apply" onclick="confirmApplyFilters()">
-                    <span>🎯 確認套用篩選</span>
-                    <span>(即時符合 <span id="modal-match-count-top">0</span> 筆)</span>
-                </button>
             </div>
 
             <!-- 抽屜內容 -->
