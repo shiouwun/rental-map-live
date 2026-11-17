@@ -6,6 +6,9 @@
     <title>🏠 希干希納區・租屋幾何可視化地圖</title>
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- MarkerCluster CSS (解決點位扎堆重疊) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
     <style>
         * {
             margin: 0;
@@ -14,7 +17,7 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
         body {
-            background: #121214;
+            background: #18181b;
             color: #e1e1e6;
             display: flex;
             flex-direction: column;
@@ -104,17 +107,17 @@
         /* 頂部資訊列 */
         header {
             background: #1a1a1e;
-            padding: 10px 16px;
+            padding: 10px 14px;
             border-bottom: 1px solid #29292e;
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             z-index: 1000;
         }
         .header-title {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
             color: #00e676;
             display: flex;
@@ -123,27 +126,29 @@
         }
         .stats-bar {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             font-size: 12px;
         }
         .stat-item {
             background: #202024;
-            padding: 4px 8px;
+            padding: 3px 8px;
             border-radius: 6px;
             border: 1px solid #323238;
         }
         .stat-item b {
             color: #00e676;
         }
+
         /* 過濾標籤列 */
         .filter-bar {
             background: #18181b;
-            padding: 8px 16px;
+            padding: 8px 12px;
             display: flex;
             gap: 8px;
             overflow-x: auto;
             border-bottom: 1px solid #27272a;
             white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
         }
         .filter-btn {
             background: #27272a;
@@ -154,6 +159,7 @@
             font-size: 12px;
             cursor: pointer;
             transition: all 0.2s;
+            flex-shrink: 0;
         }
         .filter-btn.active {
             background: #00e676;
@@ -161,27 +167,29 @@
             font-weight: 600;
             border-color: #00e676;
         }
+
         /* 地圖容器 */
         #map {
             flex: 1;
             width: 100%;
             height: 100%;
-            background: #18181b;
+            background: #e5e7eb;
         }
+
         /* 底部浮動卡片 */
         #detail-card {
             position: absolute;
-            bottom: 20px;
+            bottom: 16px;
             left: 50%;
             transform: translateX(-50%);
-            width: 90%;
+            width: 92%;
             max-width: 440px;
-            background: rgba(26, 26, 30, 0.95);
-            backdrop-filter: blur(10px);
+            background: rgba(26, 26, 30, 0.96);
+            backdrop-filter: blur(12px);
             border: 1px solid #3b82f6;
             border-radius: 12px;
             padding: 14px 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
             display: none;
             z-index: 1001;
         }
@@ -189,26 +197,27 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
         .card-title {
             font-size: 15px;
             font-weight: 700;
             color: #fff;
-            max-width: 80%;
+            max-width: 85%;
             line-height: 1.3;
         }
         .card-close {
             background: none;
             border: none;
             color: #a1a1aa;
-            font-size: 18px;
+            font-size: 20px;
             cursor: pointer;
+            padding: 0 4px;
         }
         .card-props {
             display: flex;
             gap: 12px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             font-size: 13px;
         }
         .card-price {
@@ -223,7 +232,7 @@
             border-radius: 4px;
             font-size: 12px;
             color: #cbd5e1;
-            line-height: 1.4;
+            line-height: 1.45;
             margin-bottom: 10px;
         }
         .card-bus-info b {
@@ -235,7 +244,7 @@
             background: #00e676;
             color: #000;
             font-weight: 700;
-            padding: 8px 0;
+            padding: 9px 0;
             border-radius: 6px;
             text-decoration: none;
             font-size: 13px;
@@ -262,14 +271,14 @@
         <div class="stats-bar">
             <div class="stat-item">天選: <b id="stat-match">0</b></div>
             <div class="stat-item">撿漏: <b id="stat-pot">0</b></div>
-            <div class="stat-item">直達站點: <b id="stat-stops">78</b></div>
+            <div class="stat-item">站點: <b id="stat-stops">78</b></div>
         </div>
     </header>
 
     <div class="filter-bar">
-        <button class="filter-btn active" onclick="setFilter('all')">🌐 顯示全部</button>
+        <button class="filter-btn active" onclick="setFilter('all')">🌐 全部房源</button>
         <button class="filter-btn" onclick="setFilter('match')">🟢 僅看天選 (20坪/2萬/電梯)</button>
-        <button class="filter-btn" onclick="setFilter('potential')">🟡 撿漏潛力 (可議價/租補)</button>
+        <button class="filter-btn" onclick="setFilter('potential')">🟡 撿漏潛力 (租補可達標)</button>
         <button class="filter-btn" id="btn-stops" onclick="toggleStops()">🚏 切換公車站/500m光圈</button>
     </div>
 
@@ -291,8 +300,9 @@
         <a href="#" target="_blank" class="card-link" id="c-link">點此前往 591 詳情頁賞屋 ↗</a>
     </div>
 
-    <!-- Leaflet JS -->
+    <!-- Leaflet JS & MarkerCluster JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
     <script>
         const EXPECTED_HASH = "41d3ac2ab48314132906cd35a333487f260db43874ba0104d3078d5db1191172";
         const companyInfo = {"name": "公司總部 (敦化南路二段333號)", "address": "台北市大安區敦化南路二段333號", "lat": 25.0237672, "lon": 121.5490011, "stop": "敦化和平路口 / 和平高中"};
@@ -325,7 +335,6 @@
             initMap();
         }
 
-        // 監聽 Enter 鍵與自動免密（URL 帶 key 參數）
         document.getElementById('pass-input').addEventListener('keydown', (e) => {
             if (e.key === 'Enter') verifyPasscode();
         });
@@ -347,94 +356,122 @@
         // 地圖渲染核心
         let map = null;
         let stopsLayer = null;
-        const rentalMarkers = [];
+        let clusterGroup = null;
+        const allMarkers = [];
         let activeLine = null;
 
         function initMap() {
             if (map) return;
             map = L.map('map', {
                 zoomControl: true,
-                maxZoom: 18
-            }).setView([25.00, 121.52], 12);
-
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-                attribution: '&copy; OpenStreetMap &copy; CARTO',
-                subdomains: 'abcd',
                 maxZoom: 19
+            }).setView([25.01, 121.52], 12);
+
+            // 1. 100% 免費且路名極度清晰之官方 OpenStreetMap 瓦片圖資 (完全免 API Key！)
+            const osmStandard = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap 繁體中文標準圖資',
+                maxZoom: 19,
+                subdomains: ['a', 'b', 'c']
             }).addTo(map);
+
+            // 備用圖層：Esri 高清世界地形圖
+            const esriTopo = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+                attribution: '&copy; Esri World Topo',
+                maxZoom: 19
+            });
+
+            // 備用圖層：Esri 實景衛星圖
+            const esriSat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: '&copy; Esri World Imagery',
+                maxZoom: 19
+            });
+
+            // 加入右上角圖層切換器
+            L.control.layers({
+                "🗺️ 標準繁中街道圖 (OSM)": osmStandard,
+                "🏙️ 清爽地形圖 (Esri)": esriTopo,
+                "🛰️ 實景衛星圖 (Esri)": esriSat
+            }, null, { position: 'topright' }).addTo(map);
 
             // 統計數據
             document.getElementById('stat-match').innerText = rentalsList.filter(r => r.category === 'match').length;
             document.getElementById('stat-pot').innerText = rentalsList.filter(r => r.category === 'potential').length;
 
-            // 1. 公司總部
+            // 2. 公司總部 (金色專屬發光標記，下車終點)
             const companyIcon = L.divIcon({
                 className: 'company-marker',
-                html: '<div style="background:#eab308; color:#000; font-size:18px; border:2px solid #fff; border-radius:50%; width:34px; height:34px; display:flex; align-items:center; justify-content:center; box-shadow:0 0 15px #eab308;">🏢</div>',
-                iconSize: [34, 34],
-                iconAnchor: [17, 17]
+                html: '<div style="background:#eab308; color:#000; font-size:18px; border:2px solid #fff; border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; box-shadow:0 0 16px #eab308; cursor:pointer;">🏢</div>',
+                iconSize: [36, 36],
+                iconAnchor: [18, 18]
             });
             const compMarker = L.marker([companyInfo.lat, companyInfo.lon], { icon: companyIcon }).addTo(map);
             compMarker.bindPopup(`
-                <div style="color:#000; font-size:13px;">
-                    <b style="font-size:14px; color:#d97706;">🏢 公司總部目的地</b><br>
-                    ${companyInfo.name}<br>
-                    下車站牌：${companyInfo.stop}<br>
-                    <i style="color:#666;">所有直達公車之終點下車處</i>
+                <div style="font-size:13px; min-width:180px;">
+                    <b style="font-size:15px; color:#d97706;">🏢 公司總部目的地</b><br>
+                    <b>${companyInfo.name}</b><br>
+                    下車站牌：<b>${companyInfo.stop}</b><br>
+                    <i style="color:#666;">所有直達公車路線之終點下車處</i>
                 </div>
             `);
 
-            // 2. 78 個直達公車站與 500m 步行圈
+            // 3. 78 個直達公車站牌與 500m 綠色半透明步行圈
             stopsLayer = L.layerGroup().addTo(map);
             const busStopIcon = L.divIcon({
                 className: 'bus-marker',
-                html: '<div style="background:#0284c7; color:#fff; font-size:11px; border:1px solid #fff; border-radius:50%; width:20px; height:20px; display:flex; align-items:center; justify-content:center; opacity:0.85;">🚏</div>',
-                iconSize: [20, 20],
-                iconAnchor: [10, 10]
+                html: '<div style="background:#0284c7; color:#fff; font-size:11px; border:1.5px solid #fff; border-radius:50%; width:22px; height:22px; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 6px rgba(0,0,0,0.3); opacity:0.9;">🚏</div>',
+                iconSize: [22, 22],
+                iconAnchor: [11, 11]
             });
 
             stopsList.forEach(s => {
                 const m = L.marker([s.lat, s.lon], { icon: busStopIcon }).addTo(stopsLayer);
                 m.bindPopup(`
-                    <div style="color:#000; font-size:13px;">
+                    <div style="font-size:13px; min-width:200px;">
                         <b style="color:#0284c7; font-size:14px;">🚏 直達公車站：${s.name}</b><br>
-                        直達公車路線：<b>${s.routes.join(' / ')}</b><br>
-                        <span style="color:#16a34a;">🟢 綠圈內為 500m 舒適步行圈</span>
+                        可搭直達路線：<b style="color:#0284c7;">${s.routes.join(' / ')}</b><br>
+                        <span style="color:#16a34a; font-size:12px;">🟢 綠色光圈內為 500m 舒適步行圈</span>
                     </div>
                 `);
                 L.circle([s.lat, s.lon], {
-                    color: '#38bdf8',
-                    fillColor: '#38bdf8',
-                    fillOpacity: 0.08,
-                    weight: 1,
+                    color: '#0284c7',
+                    fillColor: '#10b981',
+                    fillOpacity: 0.12,
+                    weight: 1.5,
+                    dashArray: '3, 4',
                     radius: 500
                 }).addTo(stopsLayer);
             });
 
-            // 3. 房源標記
+            // 4. 房源點位 (使用 MarkerCluster 解決手機扎堆重疊)
+            clusterGroup = L.markerClusterGroup({
+                maxClusterRadius: 40,
+                spiderfyOnMaxZoom: true,
+                showCoverageOnHover: false,
+                zoomToBoundsOnClick: true,
+                disableClusteringAtZoom: 16
+            });
+
             rentalsList.forEach(r => {
-                let bgColor = '#64748b';
-                let borderColor = '#94a3b8';
+                let bgColor = '#475569';
+                let borderColor = '#fff';
                 let iconText = '🏠';
 
                 if (r.category === 'match') {
-                    bgColor = '#10b981';
-                    borderColor = '#fff';
+                    bgColor = '#10b981'; // 天選綠
                     iconText = '⭐️';
                 } else if (r.category === 'potential') {
-                    bgColor = '#f59e0b';
-                    borderColor = '#fff';
+                    bgColor = '#f59e0b'; // 撿漏橙
                     iconText = '⚡️';
                 }
 
                 const hIcon = L.divIcon({
                     className: 'house-marker',
-                    html: `<div style="background:${bgColor}; color:#fff; font-size:13px; border:2px solid ${borderColor}; border-radius:50%; width:26px; height:26px; display:flex; align-items:center; justify-content:center; box-shadow:0 0 8px ${bgColor};">${iconText}</div>`,
-                    iconSize: [26, 26],
-                    iconAnchor: [13, 13]
+                    html: `<div style="background:${bgColor}; color:#fff; font-size:13px; border:2px solid ${borderColor}; border-radius:50%; width:28px; height:28px; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 8px rgba(0,0,0,0.4);">${iconText}</div>`,
+                    iconSize: [28, 28],
+                    iconAnchor: [14, 14]
                 });
 
-                const marker = L.marker([r.lat, r.lon], { icon: hIcon }).addTo(map);
+                const marker = L.marker([r.lat, r.lon], { icon: hIcon });
                 marker.category = r.category;
                 marker.rentalData = r;
 
@@ -443,17 +480,20 @@
                     drawLineToStop(r);
                 });
 
-                rentalMarkers.push(marker);
+                allMarkers.push(marker);
+                clusterGroup.addLayer(marker);
             });
+
+            map.addLayer(clusterGroup);
         }
 
         function drawLineToStop(r) {
             if (activeLine) map.removeLayer(activeLine);
             activeLine = L.polyline([[r.lat, r.lon], [r.stop_lat, r.stop_lon]], {
-                color: '#facc15',
-                weight: 3,
-                dashArray: '5, 8',
-                opacity: 0.9
+                color: '#f59e0b',
+                weight: 3.5,
+                dashArray: '6, 8',
+                opacity: 0.95
             }).addTo(map);
         }
 
@@ -479,11 +519,10 @@
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
 
-            rentalMarkers.forEach(m => {
+            clusterGroup.clearLayers();
+            allMarkers.forEach(m => {
                 if (type === 'all' || m.category === type) {
-                    map.addLayer(m);
-                } else {
-                    map.removeLayer(m);
+                    clusterGroup.addLayer(m);
                 }
             });
         }
