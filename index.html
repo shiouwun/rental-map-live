@@ -367,16 +367,15 @@
                 maxZoom: 19
             }).setView([25.01, 121.52], 12);
 
-            // 1. 100% 免費且路名極度清晰之官方 OpenStreetMap 瓦片圖資 (完全免 API Key！)
-            const osmStandard = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; OpenStreetMap 繁體中文標準圖資',
-                maxZoom: 19,
-                subdomains: ['a', 'b', 'c']
+            // 1. 全球權威、100% 免費且路名極度清晰之 Esri 高清中文街道圖 (完全免 API Key、絕不擋請求)
+            const esriStreet = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+                attribution: '&copy; Esri &copy; 雙北繁體中文街道路網',
+                maxZoom: 19
             }).addTo(map);
 
-            // 備用圖層：Esri 高清世界地形圖
-            const esriTopo = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
-                attribution: '&copy; Esri World Topo',
+            // 備用圖層：台灣內政部國土測繪中心 (NLSC 通用版電子地圖)
+            const nlscEmap = L.tileLayer('https://wmts.nlsc.gov.tw/wmts/EMAP/default/GoogleMapsCompatible/{z}/{y}/{x}', {
+                attribution: '&copy; 內政部國土測繪中心 (NLSC)',
                 maxZoom: 19
             });
 
@@ -388,8 +387,8 @@
 
             // 加入右上角圖層切換器
             L.control.layers({
-                "🗺️ 標準繁中街道圖 (OSM)": osmStandard,
-                "🏙️ 清爽地形圖 (Esri)": esriTopo,
+                "🗺️ 高清繁中街道圖 (Esri)": esriStreet,
+                "🇹🇼 台灣通用電子地圖 (NLSC)": nlscEmap,
                 "🛰️ 實景衛星圖 (Esri)": esriSat
             }, null, { position: 'topright' }).addTo(map);
 
