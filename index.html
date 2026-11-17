@@ -22,6 +22,7 @@
             display: flex;
             flex-direction: column;
             height: 100vh;
+            height: 100dvh;
             overflow: hidden;
             position: relative;
         }
@@ -234,7 +235,8 @@
             z-index: 2001;
             transform: translateY(100%);
             transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            max-height: 86vh;
+            max-height: 80vh;
+            max-height: 80dvh;
             display: flex;
             flex-direction: column;
         }
@@ -274,8 +276,22 @@
         .drawer-header-actions {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             margin-top: 4px;
+        }
+        .btn-quick-apply {
+            background: #10b981;
+            color: #000;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 1px 6px rgba(16, 185, 129, 0.3);
+        }
+        .btn-quick-apply:active {
+            opacity: 0.85;
         }
         .btn-reset-all {
             background: none;
@@ -304,7 +320,7 @@
 
         /* 抽屜內容 (可滾動區) */
         .drawer-content {
-            padding: 14px 18px;
+            padding: 14px 18px 24px;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             flex: 1;
@@ -362,23 +378,30 @@
             border-color: #ec4899;
         }
 
-        /* 自填自訂數字輸入框容器 */
+        /* 自填自訂數字輸入框容器 (強制不折行) */
         .custom-input-box {
             display: flex;
             align-items: center;
             background: #202024;
             border: 1px solid #3f3f46;
             border-radius: 10px;
-            padding: 6px 12px;
+            padding: 7px 12px;
             gap: 8px;
             font-size: 13px;
             color: #a1a1aa;
+        }
+        .custom-input-box span {
+            white-space: nowrap;
+            flex-shrink: 0;
+            font-weight: 600;
+            color: #d4d4d8;
         }
         .custom-input-box:focus-within {
             border-color: #10b981;
         }
         .custom-num-input {
             flex: 1;
+            min-width: 60px;
             background: transparent;
             border: none;
             color: #00e676;
@@ -394,9 +417,9 @@
             font-size: 13px;
         }
 
-        /* 抽屜底部確認按鈕 */
+        /* 抽屜底部確認按鈕 (加強 iOS Safari 底部避讓) */
         .drawer-footer {
-            padding: 12px 18px 20px;
+            padding: 12px 18px calc(env(safe-area-inset-bottom, 20px) + 32px);
             border-top: 1px solid #27272a;
             background: #18181b;
             flex-shrink: 0;
@@ -558,7 +581,8 @@
                 <div class="drawer-handle"></div>
                 <div class="drawer-title">⚙️ 複合條件自訂篩選</div>
                 <div class="drawer-header-actions">
-                    <button class="btn-reset-all" onclick="resetAllFilters()">🔄 重設全部</button>
+                    <button class="btn-quick-apply" onclick="confirmApplyFilters()">✓ 套用</button>
+                    <button class="btn-reset-all" onclick="resetAllFilters()">🔄 重設</button>
                     <div class="btn-close-drawer" onclick="closeFilterModal()">✕</div>
                 </div>
             </div>
@@ -579,7 +603,7 @@
                         <span class="chip-btn" data-val="30" onclick="selectAreaChip(30, this)">30坪+</span>
                     </div>
                     <div class="custom-input-box">
-                        <span>自填最小坪數：</span>
+                        <span>自訂：</span>
                         <input type="number" id="input-min-area" class="custom-num-input" placeholder="例: 18.5" step="0.5" min="0" oninput="onAreaInputChange()">
                         <span>坪以上</span>
                     </div>
@@ -599,7 +623,7 @@
                         <span class="chip-btn" data-val="30000" onclick="selectPriceChip(30000, this)">3萬內</span>
                     </div>
                     <div class="custom-input-box">
-                        <span>自填租金上限：</span>
+                        <span>自訂：</span>
                         <input type="number" id="input-max-price" class="custom-num-input" placeholder="例: 21000" step="500" min="0" oninput="onPriceInputChange()">
                         <span>元/月以下</span>
                     </div>
@@ -617,7 +641,7 @@
                         <span class="chip-btn" data-val="3000" onclick="selectMfeeChip(3000, this)">3,000內</span>
                     </div>
                     <div class="custom-input-box">
-                        <span>自填管理費上限：</span>
+                        <span>自訂：</span>
                         <input type="number" id="input-max-mfee" class="custom-num-input" placeholder="例: 2500" step="100" min="0" oninput="onMfeeInputChange()">
                         <span>元/月以下</span>
                     </div>
@@ -662,7 +686,7 @@
                         <span class="chip-btn" data-val="10" onclick="selectFloorChip(10, this)">10樓以下</span>
                     </div>
                     <div class="custom-input-box">
-                        <span>自填最高樓層：</span>
+                        <span>自訂：</span>
                         <input type="number" id="input-max-floor" class="custom-num-input" placeholder="例: 5" step="1" min="1" oninput="onFloorInputChange()">
                         <span>樓以下</span>
                     </div>
